@@ -1,0 +1,31 @@
+services:
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    container_name: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=pass
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - golang
+
+  postgres:
+    image: postgres:17
+    container_name: chatroom-db
+    env_file:
+      - ./backend/worker/.env
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - golang
+
+networks:
+  golang:
+
+volumes:
+  postgres_data:
+
