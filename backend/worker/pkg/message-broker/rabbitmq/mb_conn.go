@@ -82,7 +82,7 @@ func openChannel() {
 
 func openQueue() {
 	q, err := channel.QueueDeclare(
-		"name",
+		queueName,
 		durable,
 		autoDelete,
 		exclusive,
