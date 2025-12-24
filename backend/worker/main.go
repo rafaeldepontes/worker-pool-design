@@ -1,23 +1,34 @@
 package main
 
 import (
+	"runtime"
+
 	"github.com/joho/godotenv"
+	mbSvc "github.com/rafaeldepontes/worker-pool-design/internal/message-broker/service"
 	"github.com/rafaeldepontes/worker-pool-design/internal/tool"
+	"github.com/rafaeldepontes/worker-pool-design/pkg/database/postgres"
 	"github.com/rafaeldepontes/worker-pool-design/pkg/message-broker/rabbitmq"
 )
+
+var qtdJob = runtime.NumCPU() - 1
 
 func main() {
 	envFile := ".env"
 	tool.ChecksEnvFile(&envFile)
 	godotenv.Load(envFile)
 
-	// CHANGE THIS TO BE 100% ANONYMOUS, SO JUST USE A SERVICE INSTEAD OF THE REAL PACKAGE... NEED TO ADD A NEW LAYER
-	// DEFERRING CLOSE CALLS...
-	defer rabbitmq.Close() 
+	runtime.GOMAXPROCS(runtime.NumCPU())
+
+	defer rabbitmq.Close()
+	defer postgres.Close()
 
 	// LOAD THE MESSAGE BROKER...
-
-	// LOAD THE DATABASE...
+	messageBroker := mbSvc.NewService()
 
 	// RUN THE APPLICATION...
+	for id := range qtdJob {
+		go messageBroker.Worker(id + 1)
+	}
+
+	select {}
 }
