@@ -32,9 +32,7 @@ func NewRepository() user.Repository {
 }
 
 func (ur userRepository) Create(user *model.User) error {
-	stmt, _ := ur.preparedInsertStatement()
-
-	_, err := stmt.Exec(user.Username, user.Age)
+	_, err := createStmt.Exec(user.Username, user.Age)
 	if err != nil {
 		return err
 	}
@@ -43,9 +41,7 @@ func (ur userRepository) Create(user *model.User) error {
 }
 
 func (ur userRepository) Update(newUser *model.User) error {
-	stmt, _ := ur.preparedInsertStatement()
-
-	_, err := stmt.Exec(newUser.ID, newUser.Username, newUser.Age)
+	_, err := updateStmt.Exec(newUser.ID, newUser.Username, newUser.Age)
 	if err != nil {
 		return err
 	}
@@ -54,9 +50,7 @@ func (ur userRepository) Update(newUser *model.User) error {
 }
 
 func (ur userRepository) Delete(id int64) error {
-	stmt, _ := ur.preparedInsertStatement()
-
-	_, err := stmt.Exec(id)
+	_, err := deleteStmt.Exec(id)
 	if err != nil {
 		return err
 	}
