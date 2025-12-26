@@ -1,11 +1,13 @@
 package br.rafael.resources
 
-import br.rafael.entities.User
+import br.rafael.models.Message
+import br.rafael.models.MessageReq
+import br.rafael.models.UserDTO
 import br.rafael.service.UserService
-import br.rafael.service.impl.UserServiceImpl
 import jakarta.inject.Inject
+import jakarta.ws.rs.Consumes
 import jakarta.ws.rs.GET
-import jakarta.ws.rs.NotFoundException
+import jakarta.ws.rs.POST
 import jakarta.ws.rs.Path
 import jakarta.ws.rs.PathParam
 import jakarta.ws.rs.Produces
@@ -19,13 +21,19 @@ class UserResource {
     lateinit var service: UserService
 
     @GET
-    fun getUsers() : List<User> {
+    fun getUsers() : List<UserDTO> {
         return service.getAll()
     }
 
     @GET
     @Path("{id}")
-    fun getUser(@PathParam("id") id: Long) : User {
+    fun getUser(@PathParam("id") id: Long) : UserDTO {
         return service.get(id)
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    fun doAction(msg: MessageReq) {
+        service.action(msg)
     }
 }
