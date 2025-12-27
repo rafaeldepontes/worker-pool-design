@@ -40,8 +40,8 @@ func (ur userRepository) Create(user *model.User) error {
 	return nil
 }
 
-func (ur userRepository) Update(newUser *model.User) error {
-	_, err := updateStmt.Exec(newUser.ID, newUser.Username, newUser.Age)
+func (ur userRepository) Update(ids []int64, newUser *model.User) error {
+	_, err := updateStmt.Exec(ids, newUser.Username, newUser.Age)
 	if err != nil {
 		return err
 	}
@@ -49,8 +49,8 @@ func (ur userRepository) Update(newUser *model.User) error {
 	return nil
 }
 
-func (ur userRepository) Delete(id int64) error {
-	_, err := deleteStmt.Exec(id)
+func (ur userRepository) Delete(ids []int64) error {
+	_, err := deleteStmt.Exec(ids)
 	if err != nil {
 		return err
 	}
@@ -88,7 +88,7 @@ func (ur userRepository) preparedUpdateStatement() (*sql.Stmt, error) {
 		update users
 		set username = $2,
 		age = $3
-		where id = $1
+		where id in (SELECT * FROM UNNEST($1::BIGINT[]))
 	`)
 	if err != nil {
 		fmt.Println("[ERROR] something went wrong trying to prepare the update sql\n", err)
@@ -98,7 +98,7 @@ func (ur userRepository) preparedUpdateStatement() (*sql.Stmt, error) {
 }
 
 func (ur userRepository) preparedDeleteStatement() (*sql.Stmt, error) {
-	stmt, err := ur.db.Prepare(`delete from users where id = $1`)
+	stmt, err := ur.db.Prepare(`delete from users where id in (SELECT * FROM UNNEST($1::BIGINT[]))`)
 	if err != nil {
 		fmt.Println("[ERROR] something went wrong trying to prepare the delete sql\n", err)
 		return nil, err

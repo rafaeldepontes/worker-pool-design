@@ -1,6 +1,7 @@
 package process
 
 type Process[T any] struct {
-	Data T      `json:"data"`
-	Type string `json:"type"`
+	IDs  []int64 `json:"ids"`
+	Data T       `json:"data"`
+	Type string  `json:"type"`
 }

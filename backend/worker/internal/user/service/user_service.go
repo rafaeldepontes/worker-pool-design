@@ -26,12 +26,12 @@ func (us *userService) ProcessData(d process.Process[model.User]) error {
 		}
 	case "update":
 		println("updatings users")
-		if err := us.repo.Update(&d.Data); err != nil {
+		if err := us.repo.Update(d.IDs, &d.Data); err != nil {
 			return err
 		}
 	case "delete":
 		println("deleting users")
-		if err := us.repo.Delete(d.Data.ID); err != nil {
+		if err := us.repo.Delete(d.IDs); err != nil {
 			return err
 		}
 	}

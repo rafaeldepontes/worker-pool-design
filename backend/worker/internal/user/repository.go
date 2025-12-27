@@ -4,6 +4,6 @@ import "github.com/rafaeldepontes/worker-pool-design/internal/user/model"
 
 type Repository interface {
 	Create(user *model.User) error
-	Update(newUser *model.User) error
-	Delete(id int64) error
+	Update(ids []int64, newUser *model.User) error
+	Delete(ids []int64) error
 }
