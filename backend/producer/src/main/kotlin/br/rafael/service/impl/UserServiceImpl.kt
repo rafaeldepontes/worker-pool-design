@@ -85,16 +85,19 @@ class UserServiceImpl: UserService {
     }
 
     private fun publishCreate(msg: MessageReq) {
-        userProducer.publish(
-            MessageCreate(
-                type = msg.type,
-                data = UserMsg(
-                    age = msg.user?.age,
-                    username = msg.user?.username
+        val times = msg.times ?: throw IllegalArgumentException("Times is required")
+        for (i in 0 .. msg.times) {
+            userProducer.publish(
+                MessageCreate(
+                    type = msg.type,
+                    data = UserMsg(
+                        age = msg.user?.age,
+                        username = msg.user?.username
+                    ),
                 ),
-            ),
-            MessageCreate.serializer()
-        )
+                MessageCreate.serializer()
+            )
+        }
     }
 
     private fun publishUpdate(msg: MessageReq) {

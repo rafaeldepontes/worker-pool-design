@@ -1,6 +1,5 @@
 package br.rafael.resources
 
-import br.rafael.models.Message
 import br.rafael.models.MessageReq
 import br.rafael.models.UserDTO
 import br.rafael.service.UserService
