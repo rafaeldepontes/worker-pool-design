@@ -4,8 +4,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class UserMsg(
-    val id: Long,
-    val username: String,
-    val age: Int
+    val id: Long? = null,
+    val username: String? = null,
+    val age: Int? = null,
 ) {
 }
