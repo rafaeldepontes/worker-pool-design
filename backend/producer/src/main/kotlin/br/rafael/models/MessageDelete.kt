@@ -3,10 +3,8 @@ package br.rafael.models
 import kotlinx.serialization.Serializable
 
 @Serializable
-class MessageReq(
+class MessageDelete(
     val type: String,
-    val times: Int? = null,
     val ids: List<Long>,
-    val user: UserMsg? = null,
 ) {
 }

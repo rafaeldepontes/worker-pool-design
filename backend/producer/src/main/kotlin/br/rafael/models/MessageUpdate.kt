@@ -3,8 +3,9 @@ package br.rafael.models
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Message(
+class MessageUpdate(
     val type: String,
-    val user: UserMsg
-) {
+    val ids: List<Long>,
+    val data: UserMsg
+)  {
 }
