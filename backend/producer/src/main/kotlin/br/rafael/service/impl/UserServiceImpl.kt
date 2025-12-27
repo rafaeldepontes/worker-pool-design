@@ -1,7 +1,9 @@
 package br.rafael.service.impl
 
-import br.rafael.models.Message
+import br.rafael.models.MessageCreate
+import br.rafael.models.MessageDelete
 import br.rafael.models.MessageReq
+import br.rafael.models.MessageUpdate
 import br.rafael.models.UserDTO
 import br.rafael.models.UserMsg
 import br.rafael.producers.UserProducer
@@ -14,12 +16,12 @@ import org.eclipse.microprofile.reactive.messaging.Channel
 import org.eclipse.microprofile.reactive.messaging.Emitter
 import java.util.stream.Collectors
 
+const val CREATE = "create"
+const val UPDATE = "update"
+const val DELETE = "delete"
+
 @ApplicationScoped
 class UserServiceImpl: UserService {
-
-    val CREATE = "create"
-    val UPDATE = "update"
-    val DELETE = "delete"
 
     @Inject
     lateinit var repository: UserRepository
@@ -56,26 +58,23 @@ class UserServiceImpl: UserService {
 
     override fun action(msg: MessageReq): Unit {
         validateMessage(msg)
-        for (time in 1..msg.times) {
-            userProducer.publish(
-                Message(
-                    type = msg.type,
-                    user = UserMsg(
-                        id = msg.user.id,
-                        age = msg.user.age,
-                        username = msg.user.username
-                    ),
-                )
-            )
+
+        when (msg.type) {
+            CREATE -> publishCreate(msg)
+            UPDATE -> publishUpdate(msg)
+            DELETE -> publishDelete(msg)
         }
     }
 
     fun validateMessage(msg: MessageReq) {
         requireNotNull(msg.type) { "Type is required" }
-        requireNotNull(msg.times) { "Time is required" }
+
+        if (msg.type == CREATE) {
+            requireNotNull(msg.times) { "Times is required" }
+        }
 
         if (msg.type == UPDATE || msg.type == DELETE) {
-            requireNotNull(msg.user.id) { "Id is required" }
+            requireNotNull(msg.ids) { "Id(s) is(are) required" }
         }
 
         if (msg.type == UPDATE || msg.type == CREATE) {
@@ -84,4 +83,41 @@ class UserServiceImpl: UserService {
             requireNotNull(msg.user.age) { "Age is required" }
         }
     }
+
+    private fun publishCreate(msg: MessageReq) {
+        userProducer.publish(
+            MessageCreate(
+                type = msg.type,
+                data = UserMsg(
+                    age = msg.user?.age,
+                    username = msg.user?.username
+                ),
+            ),
+            MessageCreate.serializer()
+        )
+    }
+
+    private fun publishUpdate(msg: MessageReq) {
+        userProducer.publish(
+            MessageUpdate(
+                type = msg.type,
+                ids = msg.ids,
+                data = UserMsg(
+                    age = msg.user?.age,
+                    username = msg.user?.username
+                ),
+            ),
+            MessageUpdate.serializer()
+        )
+    }
+    private fun publishDelete(msg: MessageReq) {
+        userProducer.publish(
+            MessageDelete(
+                type = msg.type,
+                ids = msg.ids,
+            ),
+            MessageDelete.serializer()
+        )
+    }
+
 }
