@@ -1,6 +1,6 @@
 import { User } from "./user"
 
-export interface Message {
+export interface CreateMessage {
     type: string | undefined | null
     times: number | undefined | null
     user: User

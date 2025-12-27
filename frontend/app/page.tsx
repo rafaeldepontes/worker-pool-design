@@ -8,9 +8,9 @@ import { useState } from "react";
 const SUFIX = "/api/v1/users"
 
 export default function MainPage() {
+    const [data, setData] = useState<User[]>([])
     const [type, setType] = useState<string | null>(null)
     const [times, setTimes] = useState<number | null>(null)
-    const [data, setData] = useState<User[]>([])
 
     const handleSearch = async () => {
         const resp = await fetch(`${process.env.NEXT_PUBLIC_URL_QUARKUS}${SUFIX}`)
@@ -31,13 +31,43 @@ export default function MainPage() {
             throw Error("Please decide what action should be taken")
         }
 
-        const message = {
-            type,
-            times,
-            user: {
-                username: "Rafael",
-                age: 23,
+        let message
+
+        if (type == "create") {
+            message = {
+                type,
+                times,
+                ids: [],
+                user: {
+                    username: "Test",
+                    age: 18,
+                }
             }
+            
+        } else if (type == "update") {
+            const ids:number[] = [61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73 ,74 ,75 ,76, 77, 78, 79] // remove mock...
+            message = {
+                type,
+                times: 1,
+                ids,
+                user: {
+                    username: "updated Test",
+                    age: 21,
+                }
+            }
+
+        } else if (type == "delete") {
+            const ids:number[] = [61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73 ,74 ,75 ,76, 77, 78, 79] // remove mock...
+            message = {
+                type,
+                times: 1,
+                ids,
+                user: {
+                    username: "",
+                    age: 0,
+                }
+            }
+
         }
 
         const resp = await fetch(`${process.env.NEXT_PUBLIC_URL_QUARKUS}${SUFIX}`, {
@@ -55,9 +85,9 @@ export default function MainPage() {
 
     return (
         <>
-            <h1>User Management</h1>
-            <ActionButtons setType={setType}/>
-            <TimesInput setTimes={setTimes} />
+            <h1 id="title">User Management</h1>
+            <ActionButtons type={type} setType={setType}/>
+            <TimesInput times={times} setTimes={setTimes} />
             <UserList
                 data={data} 
                 handleSearch={handleSearch}

@@ -1,18 +1,23 @@
 import { Dispatch, SetStateAction } from "react";
 
 export default function TimesInput({
-    setTimes
-}:{
-    setTimes: Dispatch<SetStateAction<number | null>>
+  times,
+  setTimes,
+}: {
+  times: number | null;
+  setTimes: Dispatch<SetStateAction<number | null>>;
 }) {
-    return (
-        <input
-            type="number"
-            placeholder="how many..."
-            onChange={(e) => {
-                setTimes(Number(e.target.value))
-                console.log("new amount of times: ", Number(e.target.value))
-            }}
-        />
-    );
+  return (
+    <input
+      type="number"
+      placeholder="how many..."
+      min={1}
+      value={times ?? ""}
+      onChange={(e) => {
+        const val = e.target.value === "" ? null : Number(e.target.value);
+        setTimes(val);
+        console.log("new amount of times: ", val);
+      }}
+    />
+  );
 }
