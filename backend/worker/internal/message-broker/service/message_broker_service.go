@@ -42,7 +42,9 @@ func (msgSvc *messageService) Worker(id int) {
 		s = strPtr(time.Now().Local().Format(BrazilianDateTimeFormat))
 		fmt.Printf("%s: Worker %d processing: %s\n", *s, id, processModel.Type)
 
-		msgSvc.userSvc.ProcessData(processModel)
+		if err := msgSvc.userSvc.ProcessData(processModel); err != nil {
+			fmt.Println("[ERROR]", err)
+		}
 	}
 }
 
