@@ -11,6 +11,7 @@ export default function MainPage() {
     const [data, setData] = useState<User[]>([])
     const [type, setType] = useState<string | null>(null)
     const [times, setTimes] = useState<number | null>(null)
+    const [selectedIds, setSelectedIds] = useState<number[]>([])
 
     const handleSearch = async () => {
         const resp = await fetch(`${process.env.NEXT_PUBLIC_URL_QUARKUS}${SUFIX}`)
@@ -45,11 +46,10 @@ export default function MainPage() {
             }
             
         } else if (type == "update") {
-            const ids:number[] = [61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73 ,74 ,75 ,76, 77, 78, 79] // remove mock...
             message = {
                 type,
                 times: 1,
-                ids,
+                ids: selectedIds,
                 user: {
                     username: "updated Test",
                     age: 21,
@@ -57,11 +57,10 @@ export default function MainPage() {
             }
 
         } else if (type == "delete") {
-            const ids:number[] = [61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73 ,74 ,75 ,76, 77, 78, 79] // remove mock...
             message = {
                 type,
                 times: 1,
-                ids,
+                ids: selectedIds,
                 user: {
                     username: "",
                     age: 0,
@@ -90,6 +89,8 @@ export default function MainPage() {
             <TimesInput times={times} setTimes={setTimes} />
             <UserList
                 data={data} 
+                selectedIds={selectedIds}
+                setSelectedIds={setSelectedIds}
                 handleSearch={handleSearch}
                 handleAction={handleAction}
             />
