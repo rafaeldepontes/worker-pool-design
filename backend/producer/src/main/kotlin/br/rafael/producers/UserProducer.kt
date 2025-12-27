@@ -1,8 +1,8 @@
 package br.rafael.producers
 
-import br.rafael.models.Message
 import io.smallrye.reactive.messaging.rabbitmq.OutgoingRabbitMQMetadata
 import jakarta.enterprise.context.ApplicationScoped
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import org.eclipse.microprofile.reactive.messaging.Channel
 import org.eclipse.microprofile.reactive.messaging.Emitter
@@ -14,18 +14,18 @@ class UserProducer {
     @Channel("processes_queue")
     lateinit var emitter: Emitter<ByteArray>
 
-    fun publish(msg: Message) {
-        val body = Json
-            .encodeToString(msg)
-            .toByteArray()
+    fun <T> publish(msg: T, serializer: KSerializer<T>) {
+        val body = Json.encodeToString(serializer, msg).toByteArray()
 
         val metadata = OutgoingRabbitMQMetadata
             .builder()
             .withRoutingKey("")
             .build()
 
-        val msg = org.eclipse.microprofile.reactive.messaging.Message.of(body, Metadata.of(metadata))
-        print("MESSAGE $msg\n")
-        emitter.send(msg)
+        val message = org.eclipse.microprofile.reactive.messaging.Message
+            .of(body, Metadata.of(metadata))
+
+        emitter.send(message)
     }
+
 }
