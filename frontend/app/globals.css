@@ -1,10 +1,3 @@
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --accent: #2563eb;
-  --muted: #6b7280;
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
@@ -119,4 +112,173 @@ input[type="number"] {
   margin-left: auto;
   margin-right: auto;
   padding-top: 10px;
+}
+
+/* popup overlay */
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.35);
+  z-index: 9999;
+}
+
+/* popup box */
+.popup {
+  background: var(--background);
+  color: var(--foreground);
+  padding: 18px;
+  border-radius: 10px;
+  min-width: 320px;
+  max-width: 90%;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+/* popup title */
+.popup-title {
+  margin: 0px;
+  margin-bottom: 24px;
+  font-size: 32px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.popup-message {
+  margin: 0px;
+  margin-bottom: 24px;
+  font-size: 24px;
+  text-align: center;
+}
+
+/* popup buttons row */
+.popup-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+/* optional: make yes/cancel look better */
+.popup-actions button {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  min-width: 90px;
+}
+
+#cancel {
+  background-color: #d90000;
+  color: white;
+}
+
+:root{
+  --bg: #f7f9fb;
+  --card: #ffffff;
+  --muted: #6b7280;
+  --accent: #2563eb;
+  --success: #06b6a4;
+  --danger: #ef4444;
+  --glass: rgba(255,255,255,0.6);
+  --shadow: 0 8px 22px rgba(20, 24, 40, 0.06);
+  --radius: 12px;
+  font-synthesis: none;
+}
+
+.action-buttons{
+  display:flex;
+  gap:12px;
+  justify-content:center;
+  align-items:center;
+  padding:12px;
+}
+
+/* Base button */
+.btn{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 14px;
+  border-radius:10px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(250,250,250,0.9));
+  border: 1px solid rgba(16,24,40,0.06);
+  box-shadow: var(--shadow);
+  cursor:pointer;
+  font-weight:600;
+  color: #0f172a;
+  transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+  min-width:110px;
+  justify-content:center;
+}
+
+.btn svg{ opacity:0.9; transform:translateY(-0.5px); }
+
+.btn:hover{ transform: translateY(-3px); box-shadow: 0 14px 40px rgba(16,24,40,0.08); }
+.btn:active{ transform: translateY(-1px); }
+
+.btn.is-active{
+  box-shadow: 0 8px 28px rgba(37,99,235,0.14);
+  outline: 3px solid rgba(37,99,235,0.08);
+}
+
+/* variants */
+.btn--create{ background: linear-gradient(180deg,#e6fff1,#d8ffea); color:#065f46; border-color: rgba(6,95,70,0.08); }
+.btn--update{ background: linear-gradient(180deg,#f7e8ff,#f2ddff); color:#6b21a8; border-color: rgba(107,33,168,0.06); }
+.btn--delete{ background: linear-gradient(180deg,#ffecec,#ffdede); color:#7f1d1d; border-color: rgba(255,0,0,0.06); }
+
+/* ghost & confirm */
+.btn--ghost{ background: transparent; border: 1px solid rgba(15,23,42,0.06); color: var(--muted); font-weight:600; }
+.btn--confirm{ background: linear-gradient(90deg,var(--accent),#5b8cff); color:white; border:none; }
+
+/* Modal */
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: linear-gradient(180deg, rgba(9,10,14,0.28), rgba(9,10,14,0.36));
+  backdrop-filter: blur(2px);
+  z-index:9999;
+  padding:20px;
+}
+
+.modal{
+  width:min(680px,96%);
+  background:var(--card);
+  border-radius: var(--radius);
+  padding:28px;
+  box-shadow: 0 30px 80px rgba(12,18,35,0.12);
+  border: 1px solid rgba(16,24,40,0.04);
+  text-align:center;
+}
+
+.modal-title{
+  margin:0 0 8px 0;
+  font-size:20px;
+  font-weight:700;
+  color:#06152b;
+}
+
+.modal-body{
+  margin:0 0 20px 0;
+  color:var(--muted);
+  font-size:15px;
+}
+
+.modal-actions{
+  display:flex;
+  gap:12px;
+  justify-content:center;
+  align-items:center;
+}
+
+/* small responsive tweak */
+@media (max-width:420px){
+  .btn{ min-width:84px; padding:9px 10px; gap:6px; font-size:14px; }
+  .modal{ padding:18px; }
+  .modal-title{ font-size:18px; }
+  .modal-body{ font-size:14px; }
 }

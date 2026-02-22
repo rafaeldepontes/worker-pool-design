@@ -16,7 +16,6 @@ export default function TimesInput({
       onChange={(e) => {
         const val = e.target.value === "" ? null : Number(e.target.value);
         setTimes(val);
-        console.log("new amount of times: ", val);
       }}
     />
   );
